@@ -1,0 +1,144 @@
+The run object
+Beta
+
+Represents an execution run on a thread.
+
+id string
+The identifier, which can be referenced in API endpoints.
+--
+object string
+The object type, which is always thread.run.
+--
+created_at integer
+The Unix timestamp (in seconds) for when the run was created.
+--
+thread_id string
+The ID of the thread that was executed on as a part of this run.
+--
+assistant_id string
+The ID of the assistant used for execution of this run.
+--
+status string
+The status of the run, which can be either queued, in_progress, requires_action, cancelling, cancelled, failed, completed, incomplete, or expired.
+--
+required_action object or null
+Details on the action required to continue the run. Will be null if no action is required.
+properties:
+ type string: For now, this is always submit_tool_outputs.
+ submit_tool_outputs object: Details on the tool outputs needed for this run to continue. Properties: tool_calls array - a list of the relevant tool calls
+--
+last_error object or null
+The last error associated with this run. Will be null if there are no errors.
+properties: 
+ code string: One of server_error, rate_limit_exceeded, or invalid_prompt.
+ message string: A human-readable description of the error.
+--
+expires_at integer or null
+The Unix timestamp (in seconds) for when the run will expire.
+--
+started_at integer or null
+The Unix timestamp (in seconds) for when the run was started.
+--
+cancelled_at integer or null
+The Unix timestamp (in seconds) for when the run was cancelled.
+--
+failed_at integer or null
+The Unix timestamp (in seconds) for when the run failed.
+--
+completed_at integer or null
+The Unix timestamp (in seconds) for when the run was completed.
+--
+incomplete_details object or null
+Details on why the run is incomplete. Will be null if the run is not incomplete.
+properies: 
+ reason string: The reason why the run is incomplete. This will point to which specific token limit was reached over the course of the run.
+--
+model string 
+The model that the assistant used for this run.
+--
+instructions string
+The instructions that the assistant used for this run.
+--
+tools array
+The list of tools that the assistant used for this run.
+--
+metadata map
+Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maximum of 512 characters long.
+--
+usage object or null
+Usage statistics related to the run. This value will be null if the run is not in a terminal state (i.e. in_progress, queued, etc.).
+properties:
+ completion_tokens integer: Number of completion tokens used over the course of the run.
+ prompt_tokens integer: Number of prompt tokens used over the course of the run.
+ total_tokens integer: Total number of tokens used (prompt + completion).
+--
+temperature number or null
+The sampling temperature used for this run. If not set, defaults to 1.
+--
+top_p number or null
+The nucleus sampling value used for this run. If not set, defaults to 1.
+--
+max_prompt_tokens integer or null
+The maximum number of prompt tokens specified to have been used over the course of the run.
+--
+max_completion_tokens integer or null
+The maximum number of completion tokens specified to have been used over the course of the run.
+--
+truncation_strategy object
+Controls for how a thread will be truncated prior to the run. Use this to control the intial context window of the run.
+properties:
+ type string: The truncation strategy to use for the thread. The default is auto. If set to last_messages, the thread will be truncated to the n most recent messages in the thread. When set to auto, messages in the middle of the thread will be dropped to fit the context length of the model, max_prompt_tokens.
+ last_messages integer or null: The number of most recent messages from the thread when constructing the context for the run.
+--
+tool_choice string or object
+Controls which (if any) tool is called by the model. none means the model will not call any tools and instead generates a message. auto is the default value and means the model can pick between generating a message or calling one or more tools. required means the model must call one or more tools before responding to the user. Specifying a particular tool like {"type": "file_search"} or {"type": "function", "function": {"name": "my_function"}} forces the model to call that tool.
+--
+parallel_tool_calls boolean
+Whether to enable parallel function calling during tool use.
+--
+response_format "auto" or object
+Specifies the format that the model must output. Compatible with GPT-4o, GPT-4 Turbo, and all GPT-3.5 Turbo models since gpt-3.5-turbo-1106.
+
+Setting to { "type": "json_schema", "json_schema": {...} } enables Structured Outputs which ensures the model will match your supplied JSON schema. Learn more in the Structured Outputs guide.
+
+Setting to { "type": "json_object" } enables JSON mode, which ensures the message the model generates is valid JSON.
+
+Important: when using JSON mode, you must also instruct the model to produce JSON yourself via a system or user message. Without this, the model may generate an unending stream of whitespace until the generation reaches the token limit, resulting in a long-running and seemingly "stuck" request. Also note that the message content may be partially cut off if finish_reason="length", which indicates the generation exceeded max_tokens or the conversation exceeded the max context length.
+
+The run object:
+
+{
+  "id": "run_abc123",
+  "object": "thread.run",
+  "created_at": 1698107661,
+  "assistant_id": "asst_abc123",
+  "thread_id": "thread_abc123",
+  "status": "completed",
+  "started_at": 1699073476,
+  "expires_at": null,
+  "cancelled_at": null,
+  "failed_at": null,
+  "completed_at": 1699073498,
+  "last_error": null,
+  "model": "gpt-4o",
+  "instructions": null,
+  "tools": [{"type": "file_search"}, {"type": "code_interpreter"}],
+  "metadata": {},
+  "incomplete_details": null,
+  "usage": {
+    "prompt_tokens": 123,
+    "completion_tokens": 456,
+    "total_tokens": 579
+  },
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_prompt_tokens": 1000,
+  "max_completion_tokens": 1000,
+  "truncation_strategy": {
+    "type": "auto",
+    "last_messages": null
+  },
+  "response_format": "auto",
+  "tool_choice": "auto",
+  "parallel_tool_calls": true
+}

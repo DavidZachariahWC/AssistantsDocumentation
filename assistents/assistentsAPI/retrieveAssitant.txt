@@ -1,0 +1,48 @@
+Retrieve assistant
+Beta
+
+GET https://api.openai.com/v1/assistants/{assistant_id}
+Retrieves an assistant.
+
+Path parameters
+--
+assistant_id string Required
+The ID of the assistant to retrieve.
+--
+Returns
+The assistant object matching the specified ID.
+
+example request in node.js
+import OpenAI from "openai";
+
+const openai = new OpenAI();
+
+async function main() {
+  const myAssistant = await openai.beta.assistants.retrieve(
+    "asst_abc123"
+  );
+
+  console.log(myAssistant);
+}
+
+main();
+
+example response:
+{
+  "id": "asst_abc123",
+  "object": "assistant",
+  "created_at": 1699009709,
+  "name": "HR Helper",
+  "description": null,
+  "model": "gpt-4o",
+  "instructions": "You are an HR bot, and you have access to files to answer employee questions about company policies.",
+  "tools": [
+    {
+      "type": "file_search"
+    }
+  ],
+  "metadata": {},
+  "top_p": 1.0,
+  "temperature": 1.0,
+  "response_format": "auto"
+}

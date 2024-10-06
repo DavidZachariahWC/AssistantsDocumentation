@@ -1,0 +1,14 @@
+Delete assistant
+Beta
+
+
+DELETE https://api.openai.com/v1/assistants/{assistant_id}
+Delete an assistant.
+
+Path parameters
+--
+assistant_id string Required
+The ID of the assistant to delete.
+
+Returns
+Deletion status

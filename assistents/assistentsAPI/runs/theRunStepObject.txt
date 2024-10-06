@@ -1,0 +1,86 @@
+The run step object
+Beta
+Represents a step in execution of a run.
+
+id string
+The identifier of the run step, which can be referenced in API endpoints.
+--
+object string
+The object type, which is always thread.run.step.
+--
+created_at integer
+The Unix timestamp (in seconds) for when the run step was created.
+--
+assistant_id
+string The ID of the assistant associated with the run step.
+--
+thread_id string
+The ID of the thread that was run.
+--
+run_id string
+The ID of the run that this run step is a part of.
+--
+type string
+The type of run step, which can be either message_creation or tool_calls.
+--
+status string
+The status of the run step, which can be either in_progress, cancelled, failed, completed, or expired.
+--
+step_details object
+The details of the run step.
+possible types:
+ Message creation object: details of the message creation by the run step. Properties: type string - always message_creation; message_creation object with property message_id string (the ID of the message that was created by this run step.)
+ Tool calls object: details of the tool call. Properties: type string - Always tool_calls; tool_calls array An array of tool calls the run step was involved in. These can be associated with one of three types of tools: code_interpreter, file_search, or function.
+--
+last_error object or null
+The last error associated with this run step. Will be null if there are no errors.
+properties:
+ code string: one of server_error or rate_limit_exceeded.
+ message string: A human-readable description of the error.
+--
+expired_at integer or null
+The Unix timestamp (in seconds) for when the run step expired. A step is considered expired if the parent run is expired.
+--
+cancelled_at integer or null
+The Unix timestamp (in seconds) for when the run step was cancelled.
+--
+failed_at integer or null
+The Unix timestamp (in seconds) for when the run step failed.
+--
+completed_at integer or null
+The Unix timestamp (in seconds) for when the run step completed.
+--
+metadata map
+Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maximum of 512 characters long.
+--
+usage object or null
+Usage statistics related to the run step. This value will be null while the run step's status is in_progress.
+
+The run step object:
+
+{
+  "id": "step_abc123",
+  "object": "thread.run.step",
+  "created_at": 1699063291,
+  "run_id": "run_abc123",
+  "assistant_id": "asst_abc123",
+  "thread_id": "thread_abc123",
+  "type": "message_creation",
+  "status": "completed",
+  "cancelled_at": null,
+  "completed_at": 1699063291,
+  "expired_at": null,
+  "failed_at": null,
+  "last_error": null,
+  "step_details": {
+    "type": "message_creation",
+    "message_creation": {
+      "message_id": "msg_abc123"
+    }
+  },
+  "usage": {
+    "prompt_tokens": 123,
+    "completion_tokens": 456,
+    "total_tokens": 579
+  }
+}

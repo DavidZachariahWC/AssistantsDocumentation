@@ -1,0 +1,8 @@
+Migration Guide Beta
+We have changed the way that tools and files work in the Assistants API between the v1 and v2 versions of the beta. Both versions of the beta continue to be accessible via the API today, but we recommend migrating to the newest version of our APIs as soon as feasible. We will deprecate v1 of the beta by the end of 2024.
+
+If you do not use tools or files with the Assistants API today, there should be no changes required for you to migrate from the v1 version to the v2 version of the beta. Simply pass the v2 beta version header and/or move to the latest version of our Node and Python SDKs!
+What has changed
+The v2 version of the Assistants API contains the following changes:
+
+this is empty because you should be using v2 of assistents. if not, we can give you the information.
